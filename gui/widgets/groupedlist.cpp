@@ -44,11 +44,28 @@ GroupedListWidget::GroupedListWidget(Dialog *boss, const Common::String &name, c
 }
 
 void GroupedListWidget::setList(const Common::U32StringArray &list) {
-	ListWidget::setList(list);
+	// Saving the position of the cursor before the data is restructured
+	int visualRow = getSelected();
+	int savedDataIndex = -1;
 
+	if (visualRow != -1) {
+		savedDataIndex = findDataIndex(visualRow);
+	}
+
+	ListWidget::setList(list);
 	_attributeValues.clear();	// Regenerate attributes for the new list
 	groupByAttribute();
 	scrollBarRecalc();
+	
+	if (savedDataIndex != -1){
+		if (savedDataIndex >= (int)list.size()) {
+		savedDataIndex = list.size() - 1;
+		}
+		// Finding the new visual row and skipping the headers
+		// Instead of rewriting the logic, use the function getNewSel(int item)
+		_selectedItem = getNewSel(savedDataIndex);
+		sendCommand(kListSelectionChangedCmd, _selectedItem);
+	}
 }
 
 void GroupedListWidget::setAttributeValues(const Common::U32StringArray &attrValues) {
