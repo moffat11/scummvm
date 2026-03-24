@@ -59,7 +59,7 @@ void GroupedListWidget::setList(const Common::U32StringArray &list) {
 	
 	if (savedDataIndex != -1){
 		if (savedDataIndex >= (int)list.size()) {
-		savedDataIndex = list.size() - 1;
+			savedDataIndex = list.size() - 1;
 		}
 		// Finding the new visual row and skipping the headers
 		// Instead of rewriting the logic, use the function getNewSel(int item)
